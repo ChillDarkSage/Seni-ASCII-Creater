@@ -1,0 +1,103 @@
+﻿<Window x:Class="SeniASCIICreater.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:SeniASCIICreater"
+        xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+        mc:Ignorable="d"
+        Title="Seni ASCII Creater" Width="500" Height="350"  WindowStartupLocation="CenterScreen"
+        Background="Transparent" BorderBrush="Transparent" WindowStyle="None" AllowsTransparency="True">
+
+    <Window.Resources>
+        <local:CheckedToVisibility x:Key="ctv" />
+        <local:SourceToImage x:Key="sti" />
+    </Window.Resources>
+
+    <Grid Opacity="0.9">
+        <Border CornerRadius="30"  BorderThickness="2"  BorderBrush="Transparent" Opacity="1" Background="Transparent">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" Color="Gray" BlurRadius="0" RenderingBias="Quality" Direction="-45"/>
+            </Border.Effect>
+            <Border Background="Transparent" Opacity="0.8"  CornerRadius="30"/>
+        </Border>
+        <Grid  fw:PointerTracker.Enabled="True" MouseLeftButtonDown="DragWindow">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.9*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+            <Border x:Name="imgBorder" Background="#D6D6D6" Grid.ColumnSpan="3" Grid.RowSpan="3" CornerRadius="30">
+                <Image x:Name="image" Stretch="UniformToFill">
+                    <Image.Clip>
+                        <RectangleGeometry x:Name="borderRect" RadiusX="30" RadiusY="30" />
+                    </Image.Clip>
+                    <Image.Effect>
+                        <BlurEffect Radius="20"/>
+                    </Image.Effect>
+                </Image>
+            </Border>
+
+            <Image x:Name="title" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="3" Grid.RowSpan="3" Source="image.png"  Width="500"/>
+            <Image x:Name="author" HorizontalAlignment="Center" VerticalAlignment="Center" Source="author.png"  Width="185" Margin="340,147,25,55" Grid.Row="1" Grid.ColumnSpan="3" />
+            <Image x:Name="icon" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="icon.png" Width="35" Height="35" Margin="10" Opacity="0.8"/>
+
+            <Image  Source="close-line.png" Width="35" Height="35" Opacity="0.8" Grid.Column="2" Grid.Row="0" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" />
+            <Button Width="35" Height="35" Click="Close" Opacity="0.8" 
+                    Grid.Column="3" Grid.Row="0" Margin="10" Style="{StaticResource ButtonRoundAccentRevealStyle}" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" BorderBrush="Transparent" />
+
+
+            <Button Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Content="Order!" Margin="7.5, 7.5, 15, 7.5" Opacity="0.5"
+                MaxWidth="80" MaxHeight="36" MinWidth="70" MinHeight="36" Style="{StaticResource ButtonRoundAccentRevealStyle}" Click="Start">
+            </Button>
+            <Button Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Content="选择" Margin="7.5, 7.5, 10, 7.5" Opacity="0.5"
+                    MaxWidth="80" MaxHeight="36"  MinWidth="70" MinHeight="36" Style="{StaticResource ButtonRoundAccentRevealStyle}" Click="SelectFile"/>
+
+            <materialDesign:PopupBox Grid.Column="0" Grid.Row="3" Width="45" Height="45" Margin="15" StaysOpen="True" Opacity="0.9"
+                                     Style="{StaticResource MaterialDesignMultiFloatingActionLightPopupBox}" 
+                                     BorderBrush="LightGray" Background="WhiteSmoke" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                                     PlacementMode="RightAndAlignMiddles" PopupMode="Click"
+                                     Visibility="{Binding Path=Source, ElementName=image,Converter={StaticResource ResourceKey=sti}}">
+
+                <materialDesign:PopupBox.ToggleContent>
+                    <materialDesign:PackIcon Kind="MenuRightOutline" Width="35" Height="35" />
+                </materialDesign:PopupBox.ToggleContent>
+
+                <StackPanel Orientation="Horizontal" >
+                    <StackPanel>
+                        <CheckBox x:Name="checkBoxColor" Background="DimGray" Width="50" Margin="5" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Click="ColorClick" Foreground="Aqua"/>
+                        <TextBox IsEnabled="False"  Text="色彩" Background="Transparent" Foreground="Black" BorderBrush="Transparent" FontSize="10" Style="{StaticResource TextBoxRevealStyle}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <CheckBox x:Name="checkBoxBalance" Background="DimGray" Width="50" Margin="5" Style="{DynamicResource MaterialDesignSwitchToggleButton}"/>
+                        <TextBox IsEnabled="False" Text="直方图均衡化" Background="Transparent" Foreground="Black" BorderBrush="Transparent" FontSize="10" Style="{StaticResource TextBoxRevealStyle}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <CheckBox x:Name="checkBoxGaussion" Background="DimGray" Width="50" Margin="5" IsEnabled="False" Style="{DynamicResource MaterialDesignSwitchToggleButton}" />
+                        <TextBox IsEnabled="False" Text="高斯模糊" Background="Transparent" Foreground="Black" BorderBrush="Transparent" FontSize="10" Style="{StaticResource TextBoxRevealStyle}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <CheckBox x:Name="checkBoxUserList" Background="DimGray" Width="50" Margin="5" Style="{DynamicResource MaterialDesignSwitchToggleButton}"/>
+                        <TextBox IsEnabled="False" Text="  自定义？" Foreground="Black" Background="Transparent" BorderBrush="Transparent" FontSize="10" Style="{StaticResource TextBoxRevealStyle}" HorizontalAlignment="Center" />
+                    </StackPanel>
+                    <Grid>
+                        <TextBox x:Name="textBoxUserList" Margin="5, 5, 5, 5" Width="Auto" MinWidth="75pt" MaxWidth="120pt" MaxLength="100" MaxLines="1" Height="21"
+                                 Visibility="{Binding Path=IsChecked, ElementName=checkBoxUserList, Converter={StaticResource ResourceKey=ctv}}"
+                                 HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                                 Style="{StaticResource TextBoxRevealStyle}" />
+
+                    </Grid>
+                </StackPanel>
+            </materialDesign:PopupBox>
+
+        </Grid>
+    </Grid>
+</Window>
